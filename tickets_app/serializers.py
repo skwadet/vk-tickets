@@ -15,7 +15,7 @@ class HostSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    tickets = serializers.PrimaryKeyRelatedField(many=True, queryset=models.Ticket.objects.all())
+    tickets = serializers.StringRelatedField(many=True)
     event_host = serializers.StringRelatedField()
 
     class Meta:
@@ -63,3 +63,9 @@ class HostTicketSerializer(serializers.ModelSerializer):
         fields = ['ticket_type', 'event', 'count']
 # end of host part
 # <!___________________________!>
+
+
+class CartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CartItem
+        fields = '__all__'

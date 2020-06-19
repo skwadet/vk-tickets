@@ -5,17 +5,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 from autoslug import AutoSlugField
 
 
-class Buyer(AbstractUser):
-    vk_id = models.URLField(blank=True)
-    phone = PhoneNumberField(blank=True)
-    email = models.EmailField(blank=False, unique=True)
-
-    REQUIRED_FIELDS = ['email', 'password', 'phone']
-
-    def __str__(self):
-        return '{buyer}'.format(buyer=self.username)
-
-
 class EventHost(AbstractUser):
     vk_id = models.URLField(blank=True)
     phone = PhoneNumberField(blank=True)

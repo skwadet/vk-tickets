@@ -1,5 +1,4 @@
-from rest_framework import viewsets, generics
-from rest_framework import views
+from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
@@ -34,3 +33,8 @@ class ClientEventViewSet(viewsets.ReadOnlyModelViewSet):
         event = self.get_object()
         serializer = serializers.EventSerializer(event)
         return Response({'status': serializer.data})
+
+
+class CartViewSet(mixins.AuthenticatedModelViewSetAPI):
+    model = models.CartItem
+    model_serializer = serializers.CartSerializer
