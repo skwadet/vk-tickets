@@ -17,3 +17,11 @@ class AuthenticatedModelViewSetAPI(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(event_host=self.request.user)
+
+
+class AuthenticatedCartModelViewSetAPI(AuthenticatedModelViewSetAPI):
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.filter(user=self.request.user.id)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

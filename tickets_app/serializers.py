@@ -55,7 +55,8 @@ class HostTicketSerializer(serializers.ModelSerializer):
         if event.event_host != event_host:
             raise serializers.ValidationError('Мероприятие не ваше, введите верные данные')
         else:
-            ticket = models.Ticket.objects.create(ticket_type=ticket_type, event=event, count=count, event_host=event_host)
+            ticket = models.Ticket.objects.create(ticket_type=ticket_type, event=event, count=count,
+                                                  event_host=event_host)
             return ticket
 
     class Meta:

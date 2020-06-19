@@ -69,11 +69,17 @@ class Cart(models.Model):
 
 
 class CartItem(models.Model):
+    PAYMENT_STATUS = [
+        ('NPD', 'Not paid'),
+        ('SPD', 'Successful paid'),
+    ]
+
     user = models.ForeignKey(EventHost, on_delete=models.CASCADE, related_name='cart_items')
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='cart_items')
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
     count = models.PositiveIntegerField()
     previous_count = models.PositiveIntegerField(blank=True, default=0)
+    status = models.CharField(max_length=4, choices=PAYMENT_STATUS, default='NPD')
 
     def clean(self):
         if self.count > self.ticket.ticket_count:
@@ -81,9 +87,9 @@ class CartItem(models.Model):
 
     def save(self, *args, **kwargs):
         if self.count > self.previous_count:
-            self.ticket.ticket_count -= self.count-1
+            self.ticket.ticket_count -= self.count - self.previous_count
         else:
-            self.ticket.ticket_count += self.previous_count-1
+            self.ticket.ticket_count += self.previous_count - self.count
         self.previous_count = self.count
         self.ticket.save()
         super(CartItem, self).save(*args, **kwargs)

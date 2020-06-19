@@ -35,6 +35,6 @@ class ClientEventViewSet(viewsets.ReadOnlyModelViewSet):
         return Response({'status': serializer.data})
 
 
-class CartViewSet(mixins.AuthenticatedModelViewSetAPI):
+class CartViewSet(mixins.AuthenticatedCartModelViewSetAPI):
     model = models.CartItem
     model_serializer = serializers.CartSerializer
