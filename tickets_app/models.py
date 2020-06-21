@@ -67,7 +67,7 @@ class Cart(models.Model):
         ('SPD', 'Successful paid'),
     ]
 
-    user = models.ForeignKey(EventHost, on_delete=models.CASCADE, related_name='carts')
+    user = models.ForeignKey(EventHost, on_delete=models.CASCADE, related_name='cart')
     status = models.CharField(max_length=4, choices=PAYMENT_STATUS, default='NPD')
 
     def __str__(self):
@@ -80,31 +80,31 @@ class CartItem(models.Model):
         ('SPD', 'Successful paid'),
     ]
 
-    user = models.ForeignKey(EventHost, on_delete=models.CASCADE, related_name='cart_items')
+    user = models.ForeignKey(EventHost, on_delete=models.CASCADE, related_name='cart_items', blank=True)
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='cart_items')
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
-    count = models.PositiveIntegerField()
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items', blank=True)
+    ticket_count = models.PositiveIntegerField()
     previous_count = models.PositiveIntegerField(blank=True, default=0)
 
     def clean(self):
-        if self.count > self.ticket.ticket_count:
+        if self.ticket_count > self.ticket.ticket_count:
             raise ValidationError('Вы покупаете больше, чем можно')
 
     def save(self, *args, **kwargs):
-        if self.count > self.previous_count:
-            self.ticket.ticket_count -= self.count - self.previous_count
+        if self.ticket_count > self.previous_count:
+            self.ticket.ticket_count -= self.ticket_count - self.previous_count
         else:
-            self.ticket.ticket_count += self.previous_count - self.count
-        self.previous_count = self.count
+            self.ticket.ticket_count += self.previous_count - self.ticket_count
+        self.previous_count = self.ticket_count
         self.ticket.save()
         super(CartItem, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        self.ticket.ticket_count += self.count
+        self.ticket.ticket_count += self.ticket_count
         self.ticket.save()
         super(CartItem, self).delete(*args, **kwargs)
 
     def __str__(self):
-        return 'Билет на {event}, пользователя {user} в кол-ве {count} шт.'.format(event=self.ticket.event,
+        return 'Билет на {event}, пользователя {user} в кол-ве {ticket_count} шт.'.format(event=self.ticket.event,
                                                                                    user=self.user,
-                                                                                   count=self.count)
+                                                                                   ticket_count=self.ticket_count)

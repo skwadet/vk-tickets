@@ -48,28 +48,22 @@ class HostTicketSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         ticket_type = validated_data.pop('ticket_type')
         event = validated_data.pop('event')
-        count = validated_data.pop('count')
+        ticket_count = validated_data.pop('ticket_count')
         event_host = validated_data.pop('event_host')
 
         # raising error if attach to wrong event
         if event.event_host != event_host:
             raise serializers.ValidationError('Мероприятие не ваше, введите верные данные')
         else:
-            ticket = models.Ticket.objects.create(ticket_type=ticket_type, event=event, count=count,
+            ticket = models.Ticket.objects.create(ticket_type=ticket_type, event=event, ticket_count=ticket_count,
                                                   event_host=event_host)
             return ticket
 
     class Meta:
         model = models.Ticket
-        fields = ['ticket_type', 'event', 'count']
+        fields = ['ticket_type', 'event', 'ticket_count']
 # end of host part
 # <!___________________________!>
-
-
-class CartItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.CartItem
-        fields = '__all__'
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -79,3 +73,19 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Cart
         fields = ['user', 'cart_items', 'status']
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        cart = CartSerializer()
+        ticket = validated_data.pop('ticket')
+        ticket_count = validated_data.pop('ticket_count')
+        user = validated_data.pop('user')
+        cart_item = models.CartItem.objects.create(user=user, ticket=ticket, ticket_count=ticket_count, cart=cart.user)
+        return cart_item
+
+    class Meta:
+        model = models.CartItem
+        fields = '__all__'
+
