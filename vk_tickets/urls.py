@@ -8,6 +8,7 @@ router.register(r'create/event', views.HostEventViewSet, basename='host_event_ap
 router.register(r'create/wallet', views.HostWalletViewSet, basename='host_wallet_api')
 router.register(r'create/ticket', views.HostTicketViewSet, basename='host_ticket_api')
 router.register(r'get/events', views.ClientEventViewSet, basename='client_events_api')
+router.register(r'get/cart-items', views.CartItemViewSet, basename='cart_items_api')
 router.register(r'get/cart', views.CartViewSet, basename='cart_api')
 
 

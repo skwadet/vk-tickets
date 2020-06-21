@@ -13,7 +13,7 @@ class EventHost(AbstractUser):
     REQUIRED_FIELDS = ['email', 'password', 'phone']
 
     def __str__(self):
-        return '{host}'.format(host=self.username)
+        return '{first_name} {last_name}'.format(first_name=self.first_name, last_name=self.last_name)
 
 
 class Event(models.Model):
@@ -62,7 +62,13 @@ class Ticket(models.Model):
 
 
 class Cart(models.Model):
+    PAYMENT_STATUS = [
+        ('NPD', 'Not paid'),
+        ('SPD', 'Successful paid'),
+    ]
+
     user = models.ForeignKey(EventHost, on_delete=models.CASCADE, related_name='carts')
+    status = models.CharField(max_length=4, choices=PAYMENT_STATUS, default='NPD')
 
     def __str__(self):
         return 'Корзина пользователя {user}'.format(user=self.user)
@@ -79,7 +85,6 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
     count = models.PositiveIntegerField()
     previous_count = models.PositiveIntegerField(blank=True, default=0)
-    status = models.CharField(max_length=4, choices=PAYMENT_STATUS, default='NPD')
 
     def clean(self):
         if self.count > self.ticket.ticket_count:
@@ -100,4 +105,6 @@ class CartItem(models.Model):
         super(CartItem, self).delete(*args, **kwargs)
 
     def __str__(self):
-        return 'Билет на {event}, пользователя {user}'.format(event=self.ticket.event, user=self.user)
+        return 'Билет на {event}, пользователя {user} в кол-ве {count} шт.'.format(event=self.ticket.event,
+                                                                                   user=self.user,
+                                                                                   count=self.count)

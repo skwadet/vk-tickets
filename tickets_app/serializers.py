@@ -66,7 +66,16 @@ class HostTicketSerializer(serializers.ModelSerializer):
 # <!___________________________!>
 
 
-class CartSerializer(serializers.ModelSerializer):
+class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CartItem
         fields = '__all__'
+
+
+class CartSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+    cart_items = serializers.StringRelatedField(many=True)
+
+    class Meta:
+        model = models.Cart
+        fields = ['user', 'cart_items', 'status']
