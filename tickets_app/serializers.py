@@ -10,7 +10,7 @@ class TicketSerializer(serializers.ModelSerializer):
 
 class HostSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.EventHost
+        model = models.User
         fields = ['__all__']
 
 
@@ -23,9 +23,6 @@ class EventSerializer(serializers.ModelSerializer):
         fields = ['description', 'name', 'date', 'slug', 'tickets', 'event_host']
 
 
-# <!___________________________!>
-# serializing only about host
-# create - spaghetti code??
 class HostWalletSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         wallet_type = validated_data.pop('wallet_type')
@@ -62,8 +59,6 @@ class HostTicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Ticket
         fields = ['ticket_type', 'event', 'ticket_count']
-# end of host part
-# <!___________________________!>
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -76,13 +71,7 @@ class CartSerializer(serializers.ModelSerializer):
 
 
 class CartItemSerializer(serializers.ModelSerializer):
-    # def create(self, validated_data):
-    #     ticket = validated_data.pop('ticket')
-    #     ticket_count = validated_data.pop('ticket_count')
-    #     user = validated_data.pop('user')
-    #     cart_item = models.CartItem.objects.create(user=user, ticket=ticket, ticket_count=ticket_count)
-    #     return cart_item
-    #
+
     class Meta:
         model = models.CartItem
         fields = '__all__'
