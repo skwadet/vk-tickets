@@ -68,24 +68,21 @@ class HostTicketSerializer(serializers.ModelSerializer):
 
 class CartSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
-    cart_items = serializers.StringRelatedField(many=True)
+    cart_item = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = models.Cart
-        fields = ['user', 'cart_items', 'status']
+        fields = ['user', 'cart_item', 'status']
 
 
 class CartItemSerializer(serializers.ModelSerializer):
-
-    def create(self, validated_data):
-        cart = CartSerializer()
-        ticket = validated_data.pop('ticket')
-        ticket_count = validated_data.pop('ticket_count')
-        user = validated_data.pop('user')
-        cart_item = models.CartItem.objects.create(user=user, ticket=ticket, ticket_count=ticket_count, cart=cart.user)
-        return cart_item
-
+    # def create(self, validated_data):
+    #     ticket = validated_data.pop('ticket')
+    #     ticket_count = validated_data.pop('ticket_count')
+    #     user = validated_data.pop('user')
+    #     cart_item = models.CartItem.objects.create(user=user, ticket=ticket, ticket_count=ticket_count)
+    #     return cart_item
+    #
     class Meta:
         model = models.CartItem
         fields = '__all__'
-

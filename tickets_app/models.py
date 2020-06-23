@@ -67,7 +67,7 @@ class Cart(models.Model):
         ('SPD', 'Successful paid'),
     ]
 
-    user = models.ForeignKey(EventHost, on_delete=models.CASCADE, related_name='cart')
+    user = models.OneToOneField(EventHost, on_delete=models.CASCADE, related_name='user_cart')
     status = models.CharField(max_length=4, choices=PAYMENT_STATUS, default='NPD')
 
     def __str__(self):
@@ -106,5 +106,5 @@ class CartItem(models.Model):
 
     def __str__(self):
         return 'Билет на {event}, пользователя {user} в кол-ве {ticket_count} шт.'.format(event=self.ticket.event,
-                                                                                   user=self.user,
-                                                                                   ticket_count=self.ticket_count)
+                                                                                          user=self.user,
+                                                                                          ticket_count=self.ticket_count)

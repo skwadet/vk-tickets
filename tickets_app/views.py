@@ -35,9 +35,19 @@ class ClientEventViewSet(viewsets.ReadOnlyModelViewSet):
         return Response({'status': serializer.data})
 
 
-class CartItemViewSet(mixins.AuthenticatedCartModelViewSetAPI):
+class CartItemViewSet(mixins.AuthenticatedCartItemModelViewSetAPI):
     model = models.CartItem
     model_serializer = serializers.CartItemSerializer
+
+    def perform_create(self, serializer):
+        buyer = self.request.user
+        cart_exists = models.Cart.objects.filter(user=buyer).exists()
+        if cart_exists:
+            serializer.save(user=buyer, cart=buyer.user_cart)
+        else:
+            new_cart = models.Cart.objects.create(user=buyer)
+            print(new_cart)
+            serializer.save(user=buyer, cart=new_cart)
 
 
 class CartViewSet(viewsets.ModelViewSet):
