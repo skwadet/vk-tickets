@@ -5,7 +5,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from autoslug import AutoSlugField
 
 
-class User(AbstractUser):
+class EventHost(AbstractUser):
     vk_id = models.URLField(blank=True)
     phone = PhoneNumberField(blank=True)
     email = models.EmailField(blank=False, unique=True)
@@ -21,7 +21,7 @@ class Event(models.Model):
     slug = AutoSlugField(populate_from='name', primary_key=True)
     description = models.TextField()
     date = models.DateTimeField()
-    event_host = models.ForeignKey(User, related_name='user_events', on_delete=models.CASCADE)
+    event_host = models.ForeignKey(EventHost, related_name='user_events', on_delete=models.CASCADE)
 
     def __str__(self):
         return '{event_name}, создано {event_host}'.format(event_name=self.name, event_host=self.event_host)
@@ -35,7 +35,7 @@ class Wallet(models.Model):
     ]
 
     wallet_id = models.CharField(max_length=250)
-    event_host = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='wallets')
+    event_host = models.OneToOneField(EventHost, on_delete=models.CASCADE, unique=True, related_name='wallets')
     wallet_type = models.CharField(max_length=3, choices=TYPE, default='CRD')
 
     def __str__(self):
@@ -51,7 +51,7 @@ class Ticket(models.Model):
         ('STND', 'Standard ticket')
     ]
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')
-    event_host = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets_host')
+    event_host = models.ForeignKey(EventHost, on_delete=models.CASCADE, related_name='tickets_host')
     ticket_count = models.PositiveIntegerField()
     ticket_type = models.CharField(max_length=4, choices=TICKET_TYPE, default='STND')
 
@@ -67,7 +67,7 @@ class Cart(models.Model):
         ('SPD', 'Successful paid'),
     ]
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_cart')
+    user = models.OneToOneField(EventHost, on_delete=models.CASCADE, related_name='user_cart')
     status = models.CharField(max_length=4, choices=PAYMENT_STATUS, default='NPD')
 
     def __str__(self):
@@ -80,7 +80,7 @@ class CartItem(models.Model):
         ('SPD', 'Successful paid'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart_items', blank=True)
+    user = models.ForeignKey(EventHost, on_delete=models.CASCADE, related_name='cart_items', blank=True)
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='cart_items')
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items', blank=True)
     ticket_count = models.PositiveIntegerField()

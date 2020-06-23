@@ -10,7 +10,7 @@ class TicketSerializer(serializers.ModelSerializer):
 
 class HostSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.User
+        model = models.EventHost
         fields = ['__all__']
 
 
