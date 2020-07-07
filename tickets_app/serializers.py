@@ -29,6 +29,7 @@ class HostWalletSerializer(serializers.ModelSerializer):
         wallet_id = validated_data.pop('wallet_id')
         event_host = validated_data.pop('event_host')
 
+        # TODO
         # raising error cause of model's singleton
         if event_host.wallets:
             raise serializers.ValidationError('У вас уже есть привязанный счет, удалите и попробуйте снова')
@@ -48,6 +49,7 @@ class HostTicketSerializer(serializers.ModelSerializer):
         ticket_count = validated_data.pop('ticket_count')
         event_host = validated_data.pop('event_host')
 
+        # TODO
         # raising error if attach to wrong event
         if event.event_host != event_host:
             raise serializers.ValidationError('Мероприятие не ваше, введите верные данные')

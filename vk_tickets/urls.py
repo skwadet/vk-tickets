@@ -15,5 +15,5 @@ router.register(r'get/cart', views.CartViewSet, basename='cart_api')
 urlpatterns = [
     path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
-    path('auth/', include('rest_framework_social_oauth2.urls')),
+    # path('auth/', include('rest_framework_social_oauth2.urls')),
 ]

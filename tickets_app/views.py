@@ -21,7 +21,7 @@ class HostTicketViewSet(services.AuthenticatedHostCreate):
 
 
 class ClientEventViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = services.QuerySetGetAllItems.get_queryset(models.Event)
+    queryset = services.AllItemsFromQueryset.get_queryset(models.Event)
     serializer_class = serializers.EventSerializer
 
 
@@ -31,5 +31,5 @@ class CartItemViewSet(services.AuthenticatedUserCartItemCRUD):
 
 
 class CartViewSet(viewsets.ModelViewSet):
-    queryset = services.QuerySetGetAllItems.get_queryset(models.Cart)
+    queryset = services.AllItemsFromQueryset.get_queryset(models.Cart)
     serializer_class = serializers.CartSerializer

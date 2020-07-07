@@ -36,7 +36,7 @@ class AuthenticatedUserCartItemCRUD(AuthenticatedHostCreate):
             serializer.save(user=buyer, cart=new_cart)
 
 
-class QuerySetGetAllItems:
+class AllItemsFromQueryset:
     @staticmethod
     def get_queryset(model):
         queryset = model.objects.all()
