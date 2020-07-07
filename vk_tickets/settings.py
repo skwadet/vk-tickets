@@ -20,9 +20,9 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'rest_framework',
     'autoslug',
-    'oauth2_provider',
-    'social_django',
-    'rest_framework_social_oauth2',
+    # 'oauth2_provider',
+    # 'social_django',
+    # 'rest_framework_social_oauth2',
 ]
 
 MIDDLEWARE = [
@@ -35,11 +35,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'social_core.backends.vk.VKOAuth2',
-    'rest_framework_social_oauth2.backends.DjangoOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-]
+# AUTHENTICATION_BACKENDS = [
+#     'social_core.backends.vk.VKOAuth2',
+#     'rest_framework_social_oauth2.backends.DjangoOAuth2',
+#     'django.contrib.auth.backends.ModelBackend',
+# ]
 
 
 ROOT_URLCONF = 'vk_tickets.urls'
@@ -58,8 +58,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+                # 'social_django.context_processors.backends',
+                # 'social_django.context_processors.login_redirect',
             ],
         },
     },
